@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
+const isGithubPages = process.env.GITHUB_PAGES === "true"
+
 const nextConfig = {
-  output: "standalone",
+  output: isGithubPages ? "export" : "standalone",
   typescript: {
     ignoreBuildErrors: true,
   },
