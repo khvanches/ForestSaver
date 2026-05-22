@@ -1,0 +1,89 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Prepare deploy bundle
+        run: bash scripts/prepare-deploy-bundle.sh
+
+      - name: Pack release
+        run: tar -czf release.tar.gz -C deploy-bundle .
+
+      - name: Upload release to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: release.tar.gz
+          target: /tmp
+
+      - name: Extract and restart app
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+
+            DEPLOY_PATH="${{ secrets.DEPLOY_PATH }}"
+            APP_PORT="${{ secrets.APP_PORT }}"
+            APP_PORT="${APP_PORT:-3000}"
+
+            mkdir -p "$DEPLOY_PATH"
+            tar -xzf /tmp/release.tar.gz -C "$DEPLOY_PATH"
+            rm -f /tmp/release.tar.gz
+
+            cd "$DEPLOY_PATH"
+            export NODE_ENV=production
+            export PORT="$APP_PORT"
+            export HOSTNAME=0.0.0.0
+
+            if ! command -v pm2 >/dev/null 2>&1; then
+              echo "pm2 is not installed on the server."
+              echo "Run once on the server: npm install -g pm2"
+              exit 1
+            fi
+
+            if pm2 describe forestsaver >/dev/null 2>&1; then
+              pm2 restart forestsaver --update-env
+            else
+              pm2 start server.js --name forestsaver
+            fi
+
+            pm2 save
