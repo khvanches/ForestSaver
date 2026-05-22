@@ -1,38 +1,57 @@
-# Деплой через GitHub Actions
+# Деплой через Docker и GitHub Actions
 
-При каждом push в `main` или `master` GitHub собирает проект и выкладывает его на ваш VPS по SSH.
+При push в `main` или `master`:
+
+1. GitHub собирает **Docker-образ** и публикует в **GitHub Container Registry** (`ghcr.io`)
+2. По SSH на сервере выполняется `docker compose pull` и `docker compose up -d`
 
 ## Секреты в GitHub (обязательно)
 
-Репозиторий → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
+**Settings** → **Secrets and variables** → **Actions** → **New repository secret**
 
 | Secret | Пример | Описание |
 |--------|--------|----------|
 | `SSH_HOST` | `123.45.67.89` | IP или домен сервера |
-| `SSH_USER` | `deploy` | SSH-пользователь на сервере |
-| `SSH_PRIVATE_KEY` | содержимое `id_rsa` | Приватный SSH-ключ (весь файл, с `BEGIN`/`END`) |
-| `DEPLOY_PATH` | `/var/www/forestsaver` | Папка на сервере, куда кладётся сайт |
+| `SSH_USER` | `deploy` | SSH-пользователь |
+| `SSH_PRIVATE_KEY` | содержимое ключа | Приватный SSH-ключ целиком |
+| `DEPLOY_PATH` | `/opt/forestsaver` | Папка с `docker-compose.yml` на сервере |
 
 ## Секреты (по желанию)
 
 | Secret | По умолчанию | Описание |
 |--------|--------------|----------|
 | `SSH_PORT` | `22` | Порт SSH |
-| `APP_PORT` | `3000` | Порт, на котором слушает Next.js |
+| `APP_PORT` | `3000` | Порт на хосте (проброс в контейнер) |
+| `GHCR_DEPLOY_TOKEN` | — | PAT с `read:packages`, если образ **приватный** |
+
+`GITHUB_TOKEN` для публикации образа настраивается автоматически.
 
 ## Один раз на сервере
 
 ```bash
-# Node.js 20+ и pm2
-curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
-sudo apt install -y nodejs
-sudo npm install -g pm2
+# Docker
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER
+# перелогиньтесь в SSH
 
-# Папка для сайта
-sudo mkdir -p /var/www/forestsaver
-sudo chown -R $USER:$USER /var/www/forestsaver
-
-# Публичный ключ (пара к SSH_PRIVATE_KEY в GitHub) — в ~/.ssh/authorized_keys
+sudo mkdir -p /opt/forestsaver
+sudo chown -R $USER:$USER /opt/forestsaver
 ```
 
-Проверка: **Actions** → workflow **Build and Deploy** → зелёная галочка после push.
+Публичный SSH-ключ — в `~/.ssh/authorized_keys` пользователя `SSH_USER`.
+
+## Пакет GHCR
+
+После первого успешного билда образ появится здесь:  
+https://github.com/khvanches/ForestSaver/pkgs/container/forestsaver
+
+Для **публичного** репозитория сделайте пакет **Public** (Package settings → Change visibility), тогда `GHCR_DEPLOY_TOKEN` не нужен.
+
+## Локально
+
+```bash
+docker build -t forestsaver .
+docker compose up -d
+```
+
+Сайт: http://localhost:3000

@@ -1,0 +1,10 @@
+services:
+  web:
+    image: ${DOCKER_IMAGE:-ghcr.io/khvanches/forestsaver:latest}
+    container_name: forestsaver
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
