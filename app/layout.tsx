@@ -18,7 +18,8 @@ export const metadata: Metadata = {
   description: 'Мы сажаем деревья взамен вырубленных. Подарите дерево близкому человеку и помогите природе.',
   generator: 'v0.app',
   icons: {
-    icon: '/favicon.jpg',
+    icon: '/favikon.png',
+    apple: '/favikon.png',
   },
 }
 
