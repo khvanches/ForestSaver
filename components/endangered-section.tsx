@@ -28,23 +28,23 @@ export function EndangeredSection() {
   }
 
   return (
-    <section className="py-14 bg-accent/10">
+    <section className="py-[4.9rem] bg-accent/10">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h2 className="font-serif text-2xl md:text-3xl mb-3 text-foreground flex items-center justify-center gap-2">
-            <AlertTriangle className="h-6 w-6 text-accent" />
+        <div className="text-center mb-9">
+          <h2 className="font-serif text-[1.65rem] md:text-[2.0625rem] mb-[0.825rem] text-foreground flex items-center justify-center gap-[0.55rem]">
+            <AlertTriangle className="h-[1.65rem] w-[1.65rem] text-accent" />
             Помощь умирающим лесам
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed text-sm">
+          <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed text-[0.9625rem]">
             Некоторые леса находятся на грани исчезновения. Такие экосистемы требуют особого внимания 
             и комплексного подхода к восстановлению.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-9 items-stretch">
           {/* Image — 1/3 */}
-          <div className="relative min-h-[280px] sm:min-h-[320px] lg:min-h-0 lg:h-full rounded-2xl overflow-hidden">
+          <div className="relative min-h-[308px] sm:min-h-[352px] lg:min-h-0 lg:h-full rounded-2xl overflow-hidden">
             <Image 
               src="/images/dying-forest.jpg" 
               alt="Умирающий лес, требующий помощи"
@@ -56,33 +56,33 @@ export function EndangeredSection() {
 
           {/* Причины и действия — 2/3 */}
           <div className="lg:col-span-2 flex flex-col justify-center">
-            <div className="space-y-5 mb-6">
+            <div className="space-y-[1.375rem] mb-[1.65rem]">
               {reasons.map((reason, index) => (
-                <div key={index} className="flex gap-4 items-start">
-                  <div className="flex-shrink-0 w-11 h-11 rounded-lg bg-accent/20 flex items-center justify-center">
-                    <reason.icon className="h-5 w-5 text-accent" />
+                <div key={index} className="flex gap-[1.1rem] items-start">
+                  <div className="flex-shrink-0 w-[3.025rem] h-[3.025rem] rounded-lg bg-accent/20 flex items-center justify-center">
+                    <reason.icon className="h-[1.375rem] w-[1.375rem] text-accent" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-1">{reason.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{reason.description}</p>
+                    <h3 className="font-semibold text-[1.1rem] text-foreground mb-[0.275rem]">{reason.title}</h3>
+                    <p className="text-muted-foreground text-[0.9625rem] leading-relaxed">{reason.description}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <p className="text-muted-foreground leading-relaxed text-sm mb-5">
+            <p className="text-muted-foreground leading-relaxed text-[0.9625rem] mb-[1.375rem]">
               У нас есть специальная программа по спасению таких лесов. Если вы хотите 
               внести значимый вклад в сохранение редких экосистем — мы обсудим участие 
               в индивидуальном порядке.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button onClick={scrollToContact} variant="default" className="gap-2">
-                <Heart className="h-4 w-4" />
+            <div className="flex flex-col sm:flex-row gap-[1.1rem]">
+              <Button onClick={scrollToContact} variant="default" className="gap-2 text-[1.1rem] px-[1.65rem] py-[0.825rem] h-auto">
+                <Heart className="h-[1.1rem] w-[1.1rem]" />
                 Хочу помочь
               </Button>
-              <Button onClick={scrollToContact} variant="outline" className="gap-2">
-                <MessageCircle className="h-4 w-4" />
+              <Button onClick={scrollToContact} variant="outline" className="gap-2 text-[1.1rem] px-[1.65rem] py-[0.825rem] h-auto">
+                <MessageCircle className="h-[1.1rem] w-[1.1rem]" />
                 Узнать подробнее
               </Button>
             </div>
