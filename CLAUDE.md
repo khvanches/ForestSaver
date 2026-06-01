@@ -17,6 +17,14 @@ Contacts and the order form are **placeholders** — email, phone, address are f
 - **Analytics:** @vercel/analytics (wired up in layout.tsx)
 - **Site language:** Russian; code and comments — Russian; config files — English
 
+## Separate pages
+
+| Route | File | Notes |
+|-------|------|-------|
+| `/privacy` | app/privacy/page.tsx | Privacy policy. Operator details are placeholder — marked as `[ОПЕРАТОР: ...]` |
+
+---
+
 ## Page sections (render order)
 
 | Component | File | Anchor | What it does |
@@ -67,6 +75,7 @@ Full first-time server setup instructions: `.github/DEPLOY_SETUP.md`
 - Order form not connected to a backend (no email sending, Telegram bot, etc.)
 - Contact details are fictional — need to be replaced with real ones
 - All stats are hardcoded, no CMS or API
+- Privacy policy operator details are placeholder (`[ОПЕРАТОР: ...]` in app/privacy/page.tsx) — fill in when legal entity is set up
 
 ## Infrastructure state (as of 2026-06-01)
 
