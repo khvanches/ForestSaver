@@ -67,5 +67,11 @@ Full first-time server setup instructions: `.github/DEPLOY_SETUP.md`
 - Order form not connected to a backend (no email sending, Telegram bot, etc.)
 - Contact details are fictional — need to be replaced with real ones
 - All stats are hardcoded, no CMS or API
-- HTTPS not set up on the server (certbot not configured yet)
-- ghcr.io package needs to be made Public after the first push
+
+## Infrastructure state (as of 2026-06-01)
+
+- CI/CD pipeline is live: push to `main` → build → deploy to VPS
+- HTTPS working via Let's Encrypt certs at `/etc/letsencrypt/live/pirogylkin.duckdns.org/`
+- nginx config: `/etc/nginx/sites-available/pirogylkin.duckdns.org.conf` (HTTPS reverse proxy → port 3000)
+- n8n was removed from the server; forestsaver now owns the domain
+- `SSH_PRIVATE_KEY` secret in GitHub is stored as **base64** (`base64 -i ~/.ssh/id_deploy`), decoded in workflow
