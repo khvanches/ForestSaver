@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build & Deploy
 
 on:
   push:
@@ -13,6 +13,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/forestsaver
+  DEPLOY_PATH: /home/deploy/forestsaver
 
 jobs:
   build-and-deploy:
@@ -39,6 +40,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: Dockerfile.amd64
+          platforms: linux/amd64
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:latest
@@ -46,50 +49,33 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Upload compose file to server
+      - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
           source: docker-compose.yml
-          target: ${{ secrets.DEPLOY_PATH }}
+          target: ${{ env.DEPLOY_PATH }}
 
-      - name: Deploy container on server
-        uses: appleboy/ssh-action@v1.2.0
+      - name: Deploy
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          envs: IMAGE_NAME
-          script_stop: true
           script: |
-            set -euo pipefail
-
-            DEPLOY_PATH="${{ secrets.DEPLOY_PATH }}"
-            APP_PORT="${{ secrets.APP_PORT }}"
-            APP_PORT="${APP_PORT:-3000}"
-            IMAGE_TAG="${{ github.sha }}"
-
-            if ! command -v docker >/dev/null 2>&1; then
-              echo "Docker is not installed on the server."
-              exit 1
-            fi
-
-            mkdir -p "$DEPLOY_PATH"
-            cd "$DEPLOY_PATH"
-
-            if [ -n "${{ secrets.GHCR_DEPLOY_TOKEN }}" ]; then
-              echo "${{ secrets.GHCR_DEPLOY_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-            fi
-
-            export DOCKER_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
-            export APP_PORT
-
+            cd ${{ env.DEPLOY_PATH }}
             docker compose pull
             docker compose up -d --remove-orphans
             docker image prune -f
 
-            echo "Deployed ${DOCKER_IMAGE} on port ${APP_PORT}"
+      - name: Smoke test
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sleep 5
+            curl -sf http://localhost:3000 > /dev/null || (echo "Smoke test failed" && exit 1)
