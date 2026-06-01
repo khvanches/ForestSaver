@@ -16,8 +16,8 @@ export default function Home() {
       <GallerySection />
       <ProgressSection />
       <ServicesSection />
-      <EndangeredSection />
       <GiftSection />
+      <EndangeredSection />
       <ContactSection />
       <Footer />
     </main>
