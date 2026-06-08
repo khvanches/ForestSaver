@@ -88,6 +88,12 @@ export function ProgressSection() {
               <p className="text-sm text-muted-foreground mt-1">
                 {Math.round(percentage)}% от цели
               </p>
+              <a
+                href="#contact"
+                className="inline-flex items-center mt-6 px-8 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
+              >
+                Хочу помочь
+              </a>
             </div>
 
             {/* Reviews */}

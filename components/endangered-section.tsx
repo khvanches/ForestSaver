@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { AlertTriangle, Flame, Bug, Thermometer, Heart, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -81,9 +82,11 @@ export function EndangeredSection() {
                 <Heart className="h-[1.1rem] w-[1.1rem]" />
                 Хочу помочь
               </Button>
-              <Button onClick={scrollToContact} variant="outline" className="gap-2 text-[1.1rem] px-[1.65rem] py-[0.825rem] h-auto">
-                <MessageCircle className="h-[1.1rem] w-[1.1rem]" />
-                Узнать подробнее
+              <Button asChild variant="outline" className="gap-2 text-[1.1rem] px-[1.65rem] py-[0.825rem] h-auto">
+                <Link href="/dying-forests">
+                  <MessageCircle className="h-[1.1rem] w-[1.1rem]" />
+                  Узнать подробнее
+                </Link>
               </Button>
             </div>
           </div>

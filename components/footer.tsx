@@ -16,6 +16,9 @@ export function Footer() {
           </p>
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <Link href="/oferta" className="hover:text-foreground transition-colors">
+              Публичная оферта
+            </Link>
             <Link href="/privacy" className="hover:text-foreground transition-colors">
               Политика конфиденциальности
             </Link>

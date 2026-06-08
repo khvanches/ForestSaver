@@ -39,7 +39,7 @@ export function AboutSection() {
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {benefits.map((benefit, index) => (
-            <div 
+            <div
               key={index}
               className="flex gap-5 p-6 rounded-xl bg-background border border-border hover:border-primary/30 transition-colors"
             >
@@ -54,6 +54,15 @@ export function AboutSection() {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="flex justify-center mt-12">
+          <a
+            href="#contact"
+            className="inline-flex items-center px-8 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
+          >
+            Хочу помочь
+          </a>
         </div>
       </div>
     </section>
