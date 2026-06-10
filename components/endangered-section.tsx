@@ -24,10 +24,6 @@ const reasons = [
 ]
 
 export function EndangeredSection() {
-  const scrollToContact = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
-  }
-
   return (
     <section className="py-[4.9rem] bg-accent/10">
       <div className="container mx-auto px-4">
@@ -78,9 +74,11 @@ export function EndangeredSection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-[1.1rem]">
-              <Button onClick={scrollToContact} variant="default" className="gap-2 text-[1.1rem] px-[1.65rem] py-[0.825rem] h-auto">
-                <Heart className="h-[1.1rem] w-[1.1rem]" />
-                Хочу помочь
+              <Button asChild variant="default" className="gap-2 text-[1.1rem] px-[1.65rem] py-[0.825rem] h-auto">
+                <Link href="/dying-forests#contact">
+                  <Heart className="h-[1.1rem] w-[1.1rem]" />
+                  Хочу помочь
+                </Link>
               </Button>
               <Button asChild variant="outline" className="gap-2 text-[1.1rem] px-[1.65rem] py-[0.825rem] h-auto">
                 <Link href="/dying-forests">

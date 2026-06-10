@@ -3,7 +3,12 @@
 import { useState } from "react"
 import { Gift, TreePine, Trees, TreeDeciduous, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
+import Link from "next/link"
 
 const giftOptions = [
   {
@@ -35,9 +40,21 @@ const giftOptions = [
 
 export function GiftSection() {
   const [selectedGift, setSelectedGift] = useState("grove")
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [form, setForm] = useState({ name: "", email: "", phone: "" })
+  const [oferta, setOferta] = useState(true)
 
-  const scrollToContact = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+  const selectedOption = giftOptions.find(o => o.id === selectedGift)!
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setSubmitted(true)
+  }
+
+  const handleOpenChange = (open: boolean) => {
+    setDialogOpen(open)
+    if (!open) setSubmitted(false)
   }
 
   return (
@@ -52,7 +69,7 @@ export function GiftSection() {
             Подарите дерево близкому человеку
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Уникальный подарок, который будет расти вместе с вашими чувствами. 
+            Уникальный подарок, который будет расти вместе с вашими чувствами.
             Получатель получит красивый сертификат и сможет следить за своим деревом.
           </p>
         </div>
@@ -64,8 +81,8 @@ export function GiftSection() {
               onClick={() => setSelectedGift(option.id)}
               className={cn(
                 "relative p-6 rounded-2xl border-2 text-left transition-all",
-                selectedGift === option.id 
-                  ? "border-primary bg-background shadow-lg" 
+                selectedGift === option.id
+                  ? "border-primary bg-background shadow-lg"
                   : "border-border bg-background hover:border-primary/30"
               )}
             >
@@ -74,15 +91,15 @@ export function GiftSection() {
                   Популярный
                 </div>
               )}
-              
+
               <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                 <option.icon className="h-7 w-7 text-primary" />
               </div>
-              
+
               <h3 className="font-serif text-xl mb-1 text-foreground">{option.title}</h3>
               <p className="font-serif text-2xl text-primary mb-2">{option.price}</p>
               <p className="text-sm text-muted-foreground mb-4">{option.description}</p>
-              
+
               <ul className="space-y-2">
                 {option.features.map((feature, idx) => (
                   <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -96,11 +113,86 @@ export function GiftSection() {
         </div>
 
         <div className="text-center mt-12">
-          <Button size="lg" onClick={scrollToContact} className="text-lg px-10 py-6">
+          <Button size="lg" onClick={() => setDialogOpen(true)} className="text-lg px-10 py-6">
             Оформить подарок
           </Button>
         </div>
       </div>
+
+      <Dialog open={dialogOpen} onOpenChange={handleOpenChange}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-xl leading-snug">
+              Создание заявки на посадку —{" "}
+              <span className="text-primary">{selectedOption.title} · {selectedOption.price}</span>
+            </DialogTitle>
+          </DialogHeader>
+
+          {submitted ? (
+            <div className="py-10 text-center">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-5">
+                <Check className="h-8 w-8 text-primary" />
+              </div>
+              <p className="font-serif text-2xl text-foreground mb-3">Ваша заявка принята</p>
+              <p className="text-muted-foreground">Мы свяжемся с вами по почте в ближайшее время.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="name">Имя <span className="text-red-500">*</span></Label>
+                <Input
+                  id="name"
+                  placeholder="Иван Иванов"
+                  required
+                  value={form.name}
+                  onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="email">Почта <span className="text-red-500">*</span></Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="ivan@example.com"
+                  required
+                  value={form.email}
+                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="phone">Телефон <span className="text-red-500">*</span></Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="+7 900 000-00-00"
+                  required
+                  value={form.phone}
+                  onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                />
+              </div>
+
+              <div className="flex items-start gap-3 pt-1">
+                <Checkbox
+                  id="oferta"
+                  checked={oferta}
+                  onCheckedChange={v => setOferta(!!v)}
+                  required
+                  className="mt-0.5"
+                />
+                <Label htmlFor="oferta" className="text-sm text-muted-foreground font-normal leading-snug cursor-pointer">
+                  Я ознакомился с <Link href="/oferta" target="_blank" className="text-primary underline underline-offset-2 hover:text-primary/80">публичной офертой</Link> и принимаю её условия
+                </Label>
+              </div>
+
+              <Button type="submit" className="w-full mt-2" size="lg" disabled={!oferta}>
+                Отправить заявку
+              </Button>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   )
 }
