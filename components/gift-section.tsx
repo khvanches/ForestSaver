@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Gift, TreePine, Trees, TreeDeciduous, Check } from "lucide-react"
+import { Gift, TreePine, Trees, TreeDeciduous, Check, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -44,11 +44,19 @@ export function GiftSection() {
   const [submitted, setSubmitted] = useState(false)
   const [form, setForm] = useState({ name: "", email: "", phone: "", recipient: "" })
   const [agreed, setAgreed] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const selectedOption = giftOptions.find(o => o.id === selectedGift)!
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
+    setLoading(true)
+    await fetch("/api/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...form, giftTitle: selectedOption.title, giftPrice: selectedOption.price }),
+    }).catch(() => {})
+    setLoading(false)
     setSubmitted(true)
   }
 
@@ -187,7 +195,8 @@ export function GiftSection() {
                 />
               </div>
 
-              <Button type="submit" className="w-full mt-2" size="lg" disabled={!agreed}>
+              <Button type="submit" className="w-full mt-2" size="lg" disabled={!agreed || loading}>
+                {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 Отправить заявку
               </Button>
 

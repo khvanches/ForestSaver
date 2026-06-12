@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Send, TreePine, Users, Wrench, HeartHandshake } from "lucide-react"
+import { Send, TreePine, Users, Wrench, HeartHandshake, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -31,9 +31,18 @@ const ways = [
 export function ContactSection() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [agreed, setAgreed] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" })
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
+    setLoading(true)
+    await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    }).catch(() => {})
+    setLoading(false)
     setIsSubmitted(true)
   }
 
@@ -89,17 +98,17 @@ export function ContactSection() {
                   <FieldGroup>
                     <Field>
                       <FieldLabel>Ваше имя <span className="text-red-500">*</span></FieldLabel>
-                      <Input placeholder="Иван Петров" required />
+                      <Input placeholder="Иван Петров" required value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
                     </Field>
 
                     <Field>
                       <FieldLabel>Email <span className="text-red-500">*</span></FieldLabel>
-                      <Input type="email" placeholder="ivan@example.com" required />
+                      <Input type="email" placeholder="ivan@example.com" required value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
                     </Field>
 
                     <Field>
                       <FieldLabel>Телефон <span className="text-red-500">*</span></FieldLabel>
-                      <Input type="tel" placeholder="+7 900 000-00-00" required />
+                      <Input type="tel" placeholder="+7 900 000-00-00" required value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
                     </Field>
 
                     <Field>
@@ -108,12 +117,14 @@ export function ContactSection() {
                         placeholder="Расскажите о себе: чем занимаетесь, какой опыт есть, как видите своё участие..."
                         rows={4}
                         required
+                        value={form.message}
+                        onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
                       />
                     </Field>
                   </FieldGroup>
 
-                  <Button type="submit" className="w-full mt-6" size="lg" disabled={!agreed}>
-                    <Send className="h-4 w-4 mr-2" />
+                  <Button type="submit" className="w-full mt-6" size="lg" disabled={!agreed || loading}>
+                    {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
                     Отправить заявку
                   </Button>
 

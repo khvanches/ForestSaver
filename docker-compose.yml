@@ -5,9 +5,14 @@ services:
     restart: unless-stopped
     ports:
       - "${APP_PORT:-3000}:3000"
+    env_file:
+      - path: .env
+        required: false
     environment:
       NODE_ENV: production
       HOSTNAME: 0.0.0.0
+    volumes:
+      - ./data:/data
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000"]
       interval: 30s
