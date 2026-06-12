@@ -34,7 +34,7 @@ const giftOptions = [
     title: "VIP посадка",
     price: "3 000 ₽",
     description: "Премиальный вклад в будущее планеты",
-    features: ["VIP-сертификат", "С именной табличкой", "Ежегодный фотоотчёт"]
+    features: ["VIP-сертификат", "С именной табличкой", "Фотоотчет о посадке"]
   }
 ]
 
@@ -42,12 +42,12 @@ export function GiftSection() {
   const [selectedGift, setSelectedGift] = useState("grove")
   const [dialogOpen, setDialogOpen] = useState(false)
   const [submitted, setSubmitted] = useState(false)
-  const [form, setForm] = useState({ name: "", email: "", phone: "" })
-  const [oferta, setOferta] = useState(true)
+  const [form, setForm] = useState({ name: "", email: "", phone: "", recipient: "" })
+  const [agreed, setAgreed] = useState(true)
 
   const selectedOption = giftOptions.find(o => o.id === selectedGift)!
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
     setSubmitted(true)
   }
@@ -173,22 +173,35 @@ export function GiftSection() {
                 />
               </div>
 
-              <div className="flex items-start gap-3 pt-1">
-                <Checkbox
-                  id="oferta"
-                  checked={oferta}
-                  onCheckedChange={v => setOferta(!!v)}
-                  required
-                  className="mt-0.5"
-                />
-                <Label htmlFor="oferta" className="text-sm text-muted-foreground font-normal leading-snug cursor-pointer">
-                  Я ознакомился с <Link href="/oferta" target="_blank" className="text-primary underline underline-offset-2 hover:text-primary/80">публичной офертой</Link> и принимаю её условия
+              <div className="space-y-1.5">
+                <Label htmlFor="recipient">
+                  Кому предназначен подарок <span className="text-red-500">*</span>
+                  <span className="text-muted-foreground font-normal"> (будет указано на сертификате)</span>
                 </Label>
+                <Input
+                  id="recipient"
+                  placeholder="Любимой Маме, Лучшему Другу..."
+                  required
+                  value={form.recipient}
+                  onChange={e => setForm(f => ({ ...f, recipient: e.target.value }))}
+                />
               </div>
 
-              <Button type="submit" className="w-full mt-2" size="lg" disabled={!oferta}>
+              <Button type="submit" className="w-full mt-2" size="lg" disabled={!agreed}>
                 Отправить заявку
               </Button>
+
+              <div className="flex items-start gap-3 mt-4">
+                <Checkbox
+                  id="agreed"
+                  checked={agreed}
+                  onCheckedChange={v => setAgreed(!!v)}
+                  className="mt-0.5"
+                />
+                <Label htmlFor="agreed" className="text-sm text-foreground font-normal leading-snug cursor-pointer whitespace-nowrap">
+                  Я принимаю <Link href="/oferta" target="_blank" className="text-primary underline underline-offset-2 hover:text-primary/80">условия оферты</Link> и <Link href="/privacy" target="_blank" className="text-primary underline underline-offset-2 hover:text-primary/80">политику конфиденциальности</Link>
+                </Label>
+              </div>
             </form>
           )}
         </DialogContent>
