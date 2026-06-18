@@ -121,9 +121,13 @@ export function GiftSection() {
         </div>
 
         <div className="text-center mt-12">
-          <Button size="lg" onClick={() => setDialogOpen(true)} className="text-lg px-10 py-6">
-            Оформить подарок
-          </Button>
+          <p className="text-muted-foreground mb-4">Для оформления заказа напишите нам на почту.</p>
+          <a
+            href="mailto:podariles@mail.ru"
+            className="inline-flex items-center gap-2 text-lg px-10 py-4 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
+          >
+            podariles@mail.ru
+          </a>
         </div>
       </div>
 

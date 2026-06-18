@@ -58,7 +58,7 @@ export function AboutSection() {
 
         <div className="flex justify-center mt-12">
           <a
-            href="#contact"
+            href="#gift"
             className="inline-flex items-center px-12 py-4 rounded-xl bg-primary text-primary-foreground font-medium text-lg hover:bg-primary/90 transition-colors"
           >
             Хочу помочь

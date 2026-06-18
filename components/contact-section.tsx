@@ -79,68 +79,21 @@ export function ContactSection() {
 
             </div>
 
-            {/* Form */}
-            <div className="bg-card p-8 rounded-2xl border border-border">
-              <h3 className="font-serif text-2xl mb-6 text-foreground">Оставить заявку</h3>
-
-              {isSubmitted ? (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                    <TreePine className="h-8 w-8 text-primary" />
-                  </div>
-                  <h4 className="font-serif text-xl mb-2 text-foreground">Заявка принята</h4>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    Мы изучим вашу заявку и свяжемся с вами в ближайшее время, чтобы обсудить участие.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit}>
-                  <FieldGroup>
-                    <Field>
-                      <FieldLabel>Ваше имя <span className="text-red-500">*</span></FieldLabel>
-                      <Input placeholder="Иван Петров" required value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
-                    </Field>
-
-                    <Field>
-                      <FieldLabel>Email <span className="text-red-500">*</span></FieldLabel>
-                      <Input type="email" placeholder="ivan@example.com" required value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
-                    </Field>
-
-                    <Field>
-                      <FieldLabel>Телефон <span className="text-red-500">*</span></FieldLabel>
-                      <Input type="tel" placeholder="+7 900 000-00-00" required value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
-                    </Field>
-
-                    <Field>
-                      <FieldLabel>Как вы можете помочь? <span className="text-red-500">*</span></FieldLabel>
-                      <Textarea
-                        placeholder="Расскажите о себе: чем занимаетесь, какой опыт есть, как видите своё участие..."
-                        rows={4}
-                        required
-                        value={form.message}
-                        onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                      />
-                    </Field>
-                  </FieldGroup>
-
-                  <Button type="submit" className="w-full mt-6" size="lg" disabled={!agreed || loading}>
-                    {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
-                    Отправить заявку
-                  </Button>
-
-                  <div className="flex items-start gap-3 mt-4">
-                    <Checkbox
-                      id="contact-agreed"
-                      checked={agreed}
-                      onCheckedChange={v => setAgreed(!!v)}
-                      className="mt-0.5"
-                    />
-                    <Label htmlFor="contact-agreed" className="text-sm text-foreground font-normal cursor-pointer whitespace-nowrap">
-                      Я принимаю <Link href="/oferta" target="_blank" className="text-primary underline underline-offset-2 hover:text-primary/80">условия оферты</Link> и <Link href="/privacy" target="_blank" className="text-primary underline underline-offset-2 hover:text-primary/80">политику конфиденциальности</Link>
-                    </Label>
-                  </div>
-                </form>
-              )}
+            {/* Заглушка */}
+            <div className="bg-card p-8 rounded-2xl border border-border flex flex-col items-center justify-center text-center gap-5">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <TreePine className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="font-serif text-2xl text-foreground">Напишите нам</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Форма заявок пока недоступна. Если вы хотите помочь лесу — напишите нам напрямую, и мы обязательно ответим.
+              </p>
+              <a
+                href="mailto:podariles@mail.ru"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
+              >
+                podariles@mail.ru
+              </a>
             </div>
 
           </div>

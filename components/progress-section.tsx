@@ -89,7 +89,7 @@ export function ProgressSection() {
                 {Math.round(percentage)}% от цели
               </p>
               <a
-                href="#contact"
+                href="#gift"
                 className="inline-flex items-center mt-6 px-8 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
               >
                 Посадить дерево

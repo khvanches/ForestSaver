@@ -73,9 +73,10 @@ Full first-time server setup instructions: `.github/DEPLOY_SETUP.md`
 ## What's not done yet
 
 - Order form not connected to a backend (no email sending, Telegram bot, etc.)
-- Contact details are fictional — need to be replaced with real ones
+- Contact email: **podariles@mail.ru** (real, set in oferta/page.tsx)
+- Operator: Худоев Иван Владимирович, самозанятый, ИНН 110118307638 — set in oferta/page.tsx and privacy/page.tsx
 - All stats are hardcoded, no CMS or API
-- Privacy policy operator details are placeholder (`[ОПЕРАТОР: ...]` in app/privacy/page.tsx) — fill in when legal entity is set up
+- No remaining `[ОПЕРАТОР: ...]` placeholders in legal docs
 
 ## Infrastructure state (as of 2026-06-01)
 

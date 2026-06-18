@@ -1,9 +1,18 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getDb } from "@/lib/db"
 
 export async function POST(req: NextRequest) {
   const { name, email, phone, message } = await req.json()
 
   console.log(`[contact] новая заявка на помощь лесу | ${name} | ${email}`)
+
+  try {
+    getDb().prepare(
+      "INSERT INTO contacts (name, email, phone, message) VALUES (?, ?, ?, ?)"
+    ).run(name, email, phone, message)
+  } catch (err) {
+    console.error("[contact] ошибка записи в БД:", err)
+  }
 
   const token = process.env.TELEGRAM_BOT_TOKEN
   const chatId = process.env.TELEGRAM_CHAT_ID
