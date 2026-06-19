@@ -1,18 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getDb } from "@/lib/db"
+import { sendEmail } from "@/lib/email"
+import { generateCertificate } from "@/lib/certificate"
 
 export async function POST(req: NextRequest) {
   const { name, email, phone, recipient, giftTitle, giftPrice } = await req.json()
 
   console.log(`[order] новая заявка: ${giftTitle} · ${giftPrice} | ${name} | ${email}`)
-
-  try {
-    getDb().prepare(
-      "INSERT INTO orders (name, email, phone, recipient, gift_title, gift_price) VALUES (?, ?, ?, ?, ?, ?)"
-    ).run(name, email, phone, recipient, giftTitle, giftPrice)
-  } catch (err) {
-    console.error("[order] ошибка записи в БД:", err)
-  }
 
   const token = process.env.TELEGRAM_BOT_TOKEN
   const chatId = process.env.TELEGRAM_CHAT_ID
@@ -22,18 +15,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true })
   }
 
-  const text =
-    `🌲 <b>Новая заявка на посадку</b>\n\n` +
-    `🎁 <b>Подарок:</b> ${giftTitle} · ${giftPrice}\n` +
-    `👤 <b>Кому:</b> ${recipient}\n` +
-    `📝 <b>Имя:</b> ${name}\n` +
-    `📧 <b>Почта:</b> ${email}\n` +
-    `📱 <b>Телефон:</b> ${phone}`
+  const text = `🌲 Новая заявка на посадку: ${giftTitle} · ${giftPrice}`
 
   const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
+    body: JSON.stringify({ chat_id: chatId, text }),
   }).catch(err => { console.error("[order] ошибка сети Telegram:", err); return null })
 
   if (res && !res.ok) {
@@ -42,6 +29,29 @@ export async function POST(req: NextRequest) {
   } else if (res?.ok) {
     console.log("[order] сообщение отправлено в Telegram")
   }
+
+  const now = new Date()
+  const certNumber =
+    `${now.getFullYear()}` +
+    `${String(now.getMonth() + 1).padStart(2, "0")}` +
+    `${String(now.getDate()).padStart(2, "0")}` +
+    `-${String(Math.floor(1000 + Math.random() * 9000))}`
+
+  const pdfBuffer = await generateCertificate({
+    recipient,
+    certNumber,
+    date: now.toLocaleDateString("ru-RU"),
+  }).catch(err => { console.error("[order] ошибка генерации сертификата:", err); return null })
+
+  await sendEmail(
+    `Новая заявка: ${giftTitle} · Сертификат №${certNumber}`,
+    `<p><b>${giftTitle} · ${giftPrice}</b></p>
+     <p>Кому: ${recipient}</p>
+     <p>Имя: ${name} | Почта: ${email} | Тел: ${phone}</p>`,
+    pdfBuffer
+      ? [{ filename: `certificate-${certNumber}.pdf`, content: pdfBuffer, contentType: "application/pdf" }]
+      : undefined
+  ).catch(err => console.error("[order] ошибка email:", err))
 
   return NextResponse.json({ ok: true })
 }

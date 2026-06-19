@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
-  serverExternalPackages: ["better-sqlite3"],
-  typescript: {
+typescript: {
     ignoreBuildErrors: true,
   },
   images: {
