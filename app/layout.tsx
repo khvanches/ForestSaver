@@ -35,6 +35,17 @@ export const metadata: Metadata = {
   },
 }
 
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ЛесВозрождение",
+  "url": "https://podariles.ru",
+  "logo": "https://podariles.ru/favikon.png",
+  "email": "podariles@mail.ru",
+  "description": "Подарите близкому именное дерево в Смоленской области. Сертификат с GPS-координатами. Вместе восстанавливаем леса России.",
+  "areaServed": { "@type": "State", "name": "Смоленская область" },
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -43,6 +54,7 @@ export default function RootLayout({
   return (
     <html lang="ru" className={`${playfair.variable} ${sourceSans.variable}`}>
       <body className="font-sans antialiased">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
         {children}
         <Analytics />
       </body>
