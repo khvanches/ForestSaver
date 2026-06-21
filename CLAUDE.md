@@ -52,7 +52,7 @@ Contacts and the order form are **placeholders** — email, phone, address are f
 
 | What | Value |
 |------|-------|
-| Domain | pirogylkin.duckdns.org |
+| Domain | podariles.ru |
 | Server | VPS, nginx + Docker |
 | Path on server | `/home/deploy/forestsaver` |
 | Docker image | `ghcr.io/khvanches/forestsaver:latest` |
