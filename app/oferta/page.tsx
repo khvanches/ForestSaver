@@ -5,6 +5,7 @@ import { TreePine } from "lucide-react"
 export const metadata: Metadata = {
   title: "Публичная оферта — ЛесВозрождение",
   description: "Публичная оферта на оказание услуг по посадке деревьев и выдаче сертификата",
+  robots: { index: false, follow: false },
 }
 
 const sections = [

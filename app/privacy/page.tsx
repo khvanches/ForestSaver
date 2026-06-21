@@ -5,6 +5,7 @@ import { TreePine } from "lucide-react"
 export const metadata: Metadata = {
   title: "Политика конфиденциальности — ЛесВозрождение",
   description: "Политика конфиденциальности персональных данных сайта ЛесВозрождение",
+  robots: { index: false, follow: false },
 }
 
 const sections = [

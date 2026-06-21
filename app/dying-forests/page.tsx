@@ -5,8 +5,14 @@ import { TreePine, Flame, Bug, Thermometer, Axe, AlertTriangle, Heart } from "lu
 import { ContactSection } from "@/components/contact-section"
 
 export const metadata: Metadata = {
-  title: "Умирающие леса — ЛесВозрождение",
-  description: "Почему леса России погибают и как мы можем это остановить вместе",
+  title: "Умирающие леса России — угрозы и как помочь",
+  description: "Пожары, вредители, вырубки и климат уничтожают леса Смоленской области. Узнайте об угрозах и как вы можете помочь восстановить лес.",
+  openGraph: {
+    title: "Умирающие леса России — угрозы и как помочь",
+    description: "Пожары, вредители, вырубки и климат уничтожают леса Смоленской области. Узнайте как помочь.",
+    url: "https://podariles.ru/dying-forests",
+    images: [{ url: "/images/dying-forest.jpg", width: 1200, height: 800, alt: "Умирающий лес" }],
+  },
 }
 
 const threats = [

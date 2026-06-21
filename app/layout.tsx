@@ -15,12 +15,23 @@ const sourceSans = Source_Sans_3({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://podariles.ru"),
-  title: 'ЛесВозрождение - Восстанавливаем леса вместе',
-  description: 'Мы сажаем деревья взамен вырубленных. Подарите дерево близкому человеку и помогите природе.',
-  generator: 'v0.app',
+  title: {
+    default: "ЛесВозрождение — Подарите дерево, помогите природе",
+    template: "%s | ЛесВозрождение",
+  },
+  description: "Подарите близкому именное дерево в Смоленской области. Сертификат с GPS-координатами от 250 ₽. Вместе восстанавливаем леса России.",
+  openGraph: {
+    siteName: "ЛесВозрождение",
+    locale: "ru_RU",
+    type: "website",
+    images: [{ url: "/images/hero-forest.jpg", width: 1200, height: 800, alt: "Лес Смоленской области" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
   icons: {
-    icon: '/favikon.png',
-    apple: '/favikon.png',
+    icon: "/favikon.png",
+    apple: "/favikon.png",
   },
 }
 
