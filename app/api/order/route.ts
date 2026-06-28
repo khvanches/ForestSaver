@@ -17,7 +17,8 @@ export async function POST(req: NextRequest) {
 
   const text = `🌲 Новая заявка на посадку: ${giftTitle} · ${giftPrice}`
 
-  const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+  const tgBase = process.env.TELEGRAM_API_BASE ?? "https://api.telegram.org"
+  const res = await fetch(`${tgBase}/bot${token}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ chat_id: chatId, text }),
