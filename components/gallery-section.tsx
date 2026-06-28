@@ -14,7 +14,7 @@ const images = [
     alt: "Посадка молодых саженцев",
   },
   {
-    src: "/images/our_forest4.png",
+    src: "/images/our_forest4.jpg",
     alt: "Молодые саженцы",
   },
 ]

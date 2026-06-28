@@ -191,7 +191,7 @@ export default function DyingForestsPage() {
                 <Image src="/images/our_forest3.jpg" alt="Наш лес" fill className="object-cover" />
               </div>
               <div className="relative h-48 rounded-xl overflow-hidden mt-6">
-                <Image src="/images/our_forest4.png" alt="Наш лес" fill className="object-cover" />
+                <Image src="/images/our_forest4.jpg" alt="Наш лес" fill className="object-cover" />
               </div>
             </div>
           </div>
